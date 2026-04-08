@@ -3,33 +3,238 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Elevate M-Pesa Demo</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Elevation Store | Premium E-Commerce</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/intasend-inlinejs-sdk@3.0.4/build/intasend-inline.js"></script>
     <style>
-        body { background-color: #f8f9fa; display: flex; align-items: center; justify-content: center; height: 100vh; }
-        .payment-card { width: 100%; max-width: 400px; border-radius: 20px; border: none; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
-        .btn-mpesa { background-color: #38b449; color: white; font-weight: bold; }
-        .btn-mpesa:hover { background-color: #2d913a; color: white; }
+        :root {
+            --royal-blue: #002366;
+            --deep-blue: #001a4d;
+            --gold: #D4AF37;
+            --soft-gold: #f4e6b0;
+            --light-gray: #f8f9fa;
+            --text-dark: #1a1a1a;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--light-gray);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        nav {
+            background: var(--royal-blue);
+            padding: 1rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 3px solid var(--gold);
+        }
+
+        .logo {
+            color: white;
+            font-weight: 800;
+            font-size: 1.5rem;
+            letter-spacing: 1px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--deep-blue) 0%, var(--royal-blue) 100%);
+            color: white;
+            padding: 100px 5%;
+            text-align: center;
+            clip-path: polygon(0 0, 100% 0, 100% 90%, 0% 100%);
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            background: linear-gradient(to right, #fff, var(--gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p { font-size: 1.2rem; margin-bottom: 30px; opacity: 0.9; }
+
+        /* Product Grid */
+        .container { padding: 50px 5%; }
+        .section-title {
+            text-align: center;
+            margin-bottom: 40px;
+            font-size: 2rem;
+            color: var(--royal-blue);
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease;
+            border: 1px solid #eee;
+        }
+
+        .product-card:hover { transform: translateY(-10px); }
+
+        .product-img {
+            width: 100%;
+            height: 250px;
+            background: #eef1f6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #ccc;
+        }
+
+        .product-info { padding: 20px; text-align: center; }
+        .product-price {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--royal-blue);
+            margin: 10px 0;
+        }
+
+        /* STK Button */
+        .buy-btn {
+            background: var(--gold);
+            color: var(--royal-blue);
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            width: 100%;
+            transition: background 0.3s;
+        }
+
+        .buy-btn:hover { background: #b8962d; }
+
+        /* Features */
+        .features {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            background: white;
+            padding: 40px 5%;
+            margin-top: 50px;
+        }
+
+        .feature-item { text-align: center; padding: 20px; }
+        .feature-item h4 { color: var(--gold); margin-bottom: 5px; }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2rem; }
+        }
     </style>
 </head>
 <body>
-    <div class="card payment-card p-4">
-        <div class="text-center mb-4">
-            <h3 class="fw-bold">M-Pesa Checkout</h3>
-            <p class="text-muted">Test the live STK Push integration</p>
-        </div>
-        <form action="stk_push.php" method="POST">
-            <div class="mb-3">
-                <label class="form-label fw-bold">Phone Number (e.g. 254746357349)</label>
-                <input type="number" name="phone" class="form-control" placeholder="2547XXXXXXXX" required>
-            </div>
-            <div class="d-flex justify-content-between mb-4">
-                <span>Total Amount:</span>
-                <span class="fw-bold text-success">KES 1.00</span>
-            </div>
-            <button type="submit" class="btn btn-mpesa w-100 py-3">SEND PROMPT</button>
-        </form>
-        <p class="text-center mt-3 xsmall text-muted">A demo by Peter Musau</p>
+
+<nav>
+    <div class="logo">ELEVATION PILLAR</div>
+    <div class="nav-links">
+        <a href="#">Home</a>
+        <a href="#">Shop</a>
+        <a href="#">Account</a>
     </div>
+</nav>
+
+<section class="hero">
+    <h1>Premium Quality, Securely Delivered</h1>
+    <p>The first mobile-optimized marketplace with instant M-Pesa STK integration.</p>
+</section>
+
+<div class="container">
+    <h2 class="section-title">Featured Products</h2>
+    <div class="product-grid">
+        <div class="product-card">
+            <div class="product-img">SMARTWATCH PRO</div>
+            <div class="product-info">
+                <h3>Titanium Series 7</h3>
+                <p class="product-price">KES 4,500</p>
+                <button class="buy-btn intasend-pay-button" data-amount="4500" data-currency="KES" data-email="customer@example.com">
+                    Pay with M-Pesa
+                </button>
+            </div>
+        </div>
+
+        <div class="product-card">
+            <div class="product-img">WIRELESS BUDS</div>
+            <div class="product-info">
+                <h3>Sonic Audio G2</h3>
+                <p class="product-price">KES 2,200</p>
+                <button class="buy-btn intasend-pay-button" data-amount="2200" data-currency="KES" data-email="customer@example.com">
+                    Pay with M-Pesa
+                </button>
+            </div>
+        </div>
+
+        <div class="product-card">
+            <div class="product-img">POWER BANK</div>
+            <div class="product-info">
+                <h3>UltraCharge 20k</h3>
+                <p class="product-price">KES 3,800</p>
+                <button class="buy-btn intasend-pay-button" data-amount="3800" data-currency="KES" data-email="customer@example.com">
+                    Pay with M-Pesa
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="features">
+    <div class="feature-item">
+        <h4>SECURE PAY</h4>
+        <p>Lipa na M-Pesa Ready</p>
+    </div>
+    <div class="feature-item">
+        <h4>FAST DELIVERY</h4>
+        <p>Mombasa & Beyond</p>
+    </div>
+    <div class="feature-item">
+        <h4>24/7 SUPPORT</h4>
+        <p>Always here for you</p>
+    </div>
+</section>
+
+<script>
+    // Initialize IntaSend SDK
+    new window.IntaSend({
+        publicAPIKey: "ISPubKey_test_your_key_here", // Replace with your actual Test Key
+        live: false // KEEP FALSE UNTIL YOU GO LIVE
+    })
+    .on("COMPLETE", (results) => {
+        alert("Payment Successful! Transaction ID: " + results.tracking_id);
+    })
+    .on("FAILED", (results) => {
+        alert("Payment failed. Please try again.");
+    })
+    .on("IN-PROGRESS", () => {
+        console.log("Waiting for M-Pesa PIN...");
+    });
+</script>
+
 </body>
 </html>
